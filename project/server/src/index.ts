@@ -1,9 +1,7 @@
+import 'reflect-metadata';
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
-import {
-  ApolloServerPluginLandingPageDisabled,
-  ApolloServerPluginLandingPageGraphQLPlayground,
-} from 'apollo-server-core';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import http from 'http';
 
 async function main() {
@@ -20,11 +18,7 @@ async function main() {
         hello: () => `Hello world`,
       },
     },
-    plugins: [
-      process.env.NODE_ENV !== 'production'
-        ? ApolloServerPluginLandingPageDisabled()
-        : ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
+    plugins: [ApolloServerPluginLandingPageLocalDefault],
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
