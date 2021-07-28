@@ -13,6 +13,7 @@
     "apollo-server-express": "^3.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
+    "reflect-metadata": "^0.1.13",
     "typescript": "^4.3.5"
   },
   "devDependencies": {
