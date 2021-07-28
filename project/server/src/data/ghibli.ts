@@ -1,5 +1,11 @@
-import { Cut } from '../entities/Cut';
+// import { Cut } from '../entities/Cut';
 import { Film } from '../entities/Film';
+
+interface Cut {
+  id: number;
+  filmId: number;
+  src: string;
+}
 
 export interface Director {
   id: number;
