@@ -1,0 +1,7 @@
+query Films {
+    films {
+        id
+        title
+        subtitle
+    }
+}
