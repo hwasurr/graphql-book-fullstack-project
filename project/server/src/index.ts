@@ -1,8 +1,8 @@
-import 'reflect-metadata';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import http from 'http';
+import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { FilmResolver } from './resolvers/Film';
 

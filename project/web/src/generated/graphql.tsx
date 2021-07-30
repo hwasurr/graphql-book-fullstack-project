@@ -15,6 +15,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type Director = {
+  __typename?: 'Director';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+};
+
 export type Film = {
   __typename?: 'Film';
   /** 영화 고유 아이디 */
@@ -35,6 +41,7 @@ export type Film = {
   posterImg: Scalars['String'];
   /** 개봉일 */
   release: Scalars['String'];
+  director: Director;
 };
 
 export type Query = {
@@ -49,7 +56,11 @@ export type FilmsQuery = (
   { __typename?: 'Query' }
   & { films: Array<(
     { __typename?: 'Film' }
-    & Pick<Film, 'id' | 'title' | 'subtitle'>
+    & Pick<Film, 'id' | 'title' | 'subtitle' | 'runningTime' | 'release' | 'posterImg'>
+    & { director: (
+      { __typename?: 'Director' }
+      & Pick<Director, 'name'>
+    ) }
   )> }
 );
 
@@ -60,6 +71,12 @@ export const FilmsDocument = gql`
     id
     title
     subtitle
+    runningTime
+    director {
+      name
+    }
+    release
+    posterImg
   }
 }
     `;
