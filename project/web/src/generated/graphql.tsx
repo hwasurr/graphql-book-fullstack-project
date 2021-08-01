@@ -53,6 +53,7 @@ export type PaginatedFilms = {
 export type Query = {
   __typename?: 'Query';
   films: PaginatedFilms;
+  film: Film;
 };
 
 
@@ -60,6 +61,28 @@ export type QueryFilmsArgs = {
   cursor?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
 };
+
+
+export type QueryFilmArgs = {
+  filmId: Scalars['Int'];
+};
+
+export type FilmQueryVariables = Exact<{
+  filmId: Scalars['Int'];
+}>;
+
+
+export type FilmQuery = (
+  { __typename?: 'Query' }
+  & { film: (
+    { __typename?: 'Film' }
+    & Pick<Film, 'id' | 'title' | 'subtitle' | 'description' | 'genre' | 'runningTime' | 'posterImg' | 'release'>
+    & { director: (
+      { __typename?: 'Director' }
+      & Pick<Director, 'id' | 'name'>
+    ) }
+  ) }
+);
 
 export type FilmsQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
@@ -84,6 +107,52 @@ export type FilmsQuery = (
 );
 
 
+export const FilmDocument = gql`
+    query film($filmId: Int!) {
+  film(filmId: $filmId) {
+    id
+    title
+    subtitle
+    description
+    genre
+    runningTime
+    posterImg
+    release
+    director {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFilmQuery__
+ *
+ * To run a query within a React component, call `useFilmQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilmQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilmQuery({
+ *   variables: {
+ *      filmId: // value for 'filmId'
+ *   },
+ * });
+ */
+export function useFilmQuery(baseOptions: Apollo.QueryHookOptions<FilmQuery, FilmQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FilmQuery, FilmQueryVariables>(FilmDocument, options);
+      }
+export function useFilmLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FilmQuery, FilmQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FilmQuery, FilmQueryVariables>(FilmDocument, options);
+        }
+export type FilmQueryHookResult = ReturnType<typeof useFilmQuery>;
+export type FilmLazyQueryHookResult = ReturnType<typeof useFilmLazyQuery>;
+export type FilmQueryResult = Apollo.QueryResult<FilmQuery, FilmQueryVariables>;
 export const FilmsDocument = gql`
     query Films($limit: Int, $cursor: Int) {
   films(limit: $limit, cursor: $cursor) {
