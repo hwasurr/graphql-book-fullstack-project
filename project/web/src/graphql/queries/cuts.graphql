@@ -1,0 +1,6 @@
+query cuts($filmId: Int!) {
+    cuts(filmId: $filmId) {
+        id
+        src
+    }
+}
