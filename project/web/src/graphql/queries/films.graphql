@@ -1,0 +1,16 @@
+query Films($limit: Int, $cursor: Int) {
+    films(limit: $limit, cursor: $cursor) {
+        cursor
+        films {
+            id
+            title
+            subtitle
+            runningTime
+            director {
+                name
+            }
+            release
+            posterImg
+        }
+    }
+}

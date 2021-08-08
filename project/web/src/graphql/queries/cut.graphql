@@ -1,0 +1,19 @@
+query cut($cutId: Int!) {
+    cut(cutId: $cutId) {
+        id
+        src
+        film {
+            id
+            title
+        }
+    }
+#   cutReviews(cutId:$cutId) {
+#     id
+#     contents
+#     isMine
+#     user {
+#       username
+#       email
+#     }
+#   }
+}
