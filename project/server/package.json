@@ -11,6 +11,8 @@
   "dependencies": {
     "apollo-server-core": "^3.0.1",
     "apollo-server-express": "^3.0.1",
+    "argon2": "^0.28.2",
+    "class-validator": "^0.13.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
     "mysql2": "^2.3.0",

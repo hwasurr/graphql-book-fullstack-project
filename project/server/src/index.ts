@@ -7,6 +7,7 @@ import { buildSchema } from 'type-graphql';
 import { CutResolver } from './resolvers/Cut';
 import { FilmResolver } from './resolvers/Film';
 import { createDB } from './db/db-client';
+import { UserResolver } from './resolvers/User';
 
 async function main() {
   await createDB();
@@ -14,7 +15,7 @@ async function main() {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [FilmResolver, CutResolver],
+      resolvers: [FilmResolver, CutResolver, UserResolver],
     }),
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
   });
