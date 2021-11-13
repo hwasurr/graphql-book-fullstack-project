@@ -28,7 +28,7 @@ async function main() {
     if (process.env.NODE_ENV !== 'production') {
       console.log(`
       server started on => http://localhost:4000
-      graphql playground => http://localhost:4000/graphql
+      apollo studio => http://localhost:4000/graphql
       `);
     } else {
       console.log(`
