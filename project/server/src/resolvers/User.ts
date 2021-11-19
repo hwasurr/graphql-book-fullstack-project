@@ -2,14 +2,17 @@ import argon2 from 'argon2';
 import { IsEmail, IsString } from 'class-validator';
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from 'type-graphql';
-import jwt from 'jsonwebtoken';
+import { MyContext } from '../apollo/createApolloServer';
 import User from '../entities/User';
+import { createAccessToken } from '../utils/jwt-auth';
 
 @InputType()
 export class SignUpInput {
@@ -48,6 +51,12 @@ class LoginResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() ctx: MyContext): Promise<User | undefined> {
+    if (!ctx.verifiedUser) return undefined;
+    return User.findOne({ where: { id: ctx.verifiedUser.userId } });
+  }
+
   @Mutation(() => User)
   async signUp(@Arg('signUpInput') signUpInput: SignUpInput): Promise<User> {
     const { email, username, password } = signUpInput;
@@ -88,13 +97,8 @@ export class UserResolver {
         ],
       };
 
-    const accessToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET_KEY || 'secret-key',
-      {
-        expiresIn: '30m',
-      },
-    );
+    // 액세스 토큰 발급
+    const accessToken = createAccessToken(user);
 
     return { user, accessToken };
   }
