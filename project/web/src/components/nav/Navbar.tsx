@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Flex,
@@ -6,10 +7,28 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useMemo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useMeQuery } from '../../generated/graphql';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 
+const LoggedInNavbarItem = (): JSX.Element => {
+  return (
+    <Stack justify="flex-end" alignItems="center" direction="row" spacing={3}>
+      <ColorModeSwitcher />
+      <Avatar size="sm" />
+    </Stack>
+  );
+};
+
 export default function Navbar(): JSX.Element {
+  const accessToken = localStorage.getItem('access_token');
+  const { data } = useMeQuery({ skip: !accessToken });
+  const isLoggedIn = useMemo(() => {
+    if (accessToken) return data?.me?.id;
+    return false;
+  }, [accessToken, data?.me?.id]);
+
   return (
     <Box
       zIndex={10}
@@ -41,29 +60,33 @@ export default function Navbar(): JSX.Element {
           </Link>
         </Flex>
 
-        <Stack justify="flex-end" direction="row" spacing={6}>
-          <ColorModeSwitcher />
-          <Button
-            fontSize="sm"
-            fontWeight={400}
-            variant="link"
-            as={RouterLink}
-            to="/login"
-          >
-            로그인
-          </Button>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize="sm"
-            fontWeight={600}
-            href="/signup"
-            colorScheme="teal"
-            as={RouterLink}
-            to="/signup"
-          >
-            시작하기
-          </Button>
-        </Stack>
+        {isLoggedIn ? (
+          <LoggedInNavbarItem />
+        ) : (
+          <Stack justify="flex-end" direction="row" spacing={6}>
+            <ColorModeSwitcher />
+            <Button
+              fontSize="sm"
+              fontWeight={400}
+              variant="link"
+              as={RouterLink}
+              to="/login"
+            >
+              로그인
+            </Button>
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize="sm"
+              fontWeight={600}
+              href="/signup"
+              colorScheme="teal"
+              as={RouterLink}
+              to="/signup"
+            >
+              시작하기
+            </Button>
+          </Stack>
+        )}
       </Flex>
     </Box>
   );
