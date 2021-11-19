@@ -1,3 +1,4 @@
+import { AuthenticationError } from 'apollo-server-express';
 import { IncomingHttpHeaders } from 'http';
 import jwt from 'jsonwebtoken';
 import User from '../entities/User';
@@ -31,7 +32,7 @@ export const verifyAccessToken = (
     return verified;
   } catch (err) {
     console.error('access_token expired: ', err.expiredAt);
-    return null;
+    throw new AuthenticationError('access token expired');
   }
 };
 
@@ -43,6 +44,9 @@ export const verifyAccessTokenFromReqHeaders = (
   if (!authorization) return null;
 
   const accessToken = authorization.split(' ')[1];
-  const verified = verifyAccessToken(accessToken);
-  return verified;
+  try {
+    return verifyAccessToken(accessToken);
+  } catch {
+    return null;
+  }
 };

@@ -9,9 +9,11 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from 'type-graphql';
 import { MyContext } from '../apollo/createApolloServer';
 import User from '../entities/User';
+import { isAuthenticated } from '../middlewares/isAuthenticated';
 import { createAccessToken } from '../utils/jwt-auth';
 
 @InputType()
@@ -51,6 +53,7 @@ class LoginResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @UseMiddleware(isAuthenticated)
   @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: MyContext): Promise<User | undefined> {
     if (!ctx.verifiedUser) return undefined;
