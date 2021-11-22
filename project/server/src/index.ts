@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import http from 'http';
 import 'reflect-metadata';
@@ -7,13 +8,14 @@ import { createDB } from './db/db-client';
 async function main() {
   await createDB();
   const app = express();
+  app.use(cookieParser());
 
   const apolloServer = await createApolloServer();
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
     cors: {
-      origin: ['http://localhost:3000'],
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
       credentials: true,
     },
   });

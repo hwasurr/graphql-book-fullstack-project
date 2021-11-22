@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 import { IsEmail, IsString } from 'class-validator';
 import {
   Arg,
@@ -14,7 +15,12 @@ import {
 import { MyContext } from '../apollo/createApolloServer';
 import User from '../entities/User';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
-import { createAccessToken, createRefreshToken } from '../utils/jwt-auth';
+import {
+  createAccessToken,
+  createRefreshToken,
+  REFRESH_JWT_SECRET_KEY,
+  setRefreshTokenHeader,
+} from '../utils/jwt-auth';
 
 @InputType()
 export class SignUpInput {
@@ -51,6 +57,11 @@ class LoginResponse {
   accessToken?: string;
 }
 
+@ObjectType({ description: '액세스 토큰 새로고침 반환 데이터' })
+class RefreshAccessTokenResponse {
+  @Field() accessToken: string;
+}
+
 @Resolver(User)
 export class UserResolver {
   @UseMiddleware(isAuthenticated)
@@ -79,7 +90,7 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   public async login(
     @Arg('loginInput') loginInput: LoginInput,
-    @Ctx() { res }: MyContext,
+    @Ctx() { res, redis }: MyContext,
   ): Promise<LoginResponse> {
     const { emailOrUsername, password } = loginInput;
 
@@ -104,15 +115,58 @@ export class UserResolver {
     // 액세스 토큰 발급
     const accessToken = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
+    // 리프레시 토큰 레디스 적재
+    await redis.set(String(user.id), refreshToken);
 
-    res.cookie('refreshtoken', refreshToken, {
-      // 자바스크립트 코드로 접근 불가능하도록
-      httpOnly: true,
-      // 프로덕션 환경의 경우, https 프로토콜에서만 동작하도록
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    });
+    setRefreshTokenHeader(res, refreshToken);
 
     return { user, accessToken };
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async logout(
+    @Ctx() { verifiedUser, res, redis }: MyContext,
+  ): Promise<boolean> {
+    if (verifiedUser) {
+      setRefreshTokenHeader(res, ''); // 리프레시 토큰 쿠키 제거
+      await redis.del(String(verifiedUser.userId)); // 레디스 리프레시 토큰 제거
+    }
+    return true;
+  }
+
+  @Mutation(() => RefreshAccessTokenResponse, { nullable: true })
+  async refreshAccessToken(
+    @Ctx() { req, redis, res }: MyContext,
+  ): Promise<RefreshAccessTokenResponse | null> {
+    const refreshToken = req.cookies.refreshtoken;
+    if (!refreshToken) return null;
+
+    let tokenData: any = null;
+    try {
+      tokenData = jwt.verify(refreshToken, REFRESH_JWT_SECRET_KEY);
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+    if (!tokenData) return null;
+
+    // 레디스 상에 user.id 로 저장된 토큰 조회
+    const storedRefreshToken = await redis.get(String(tokenData.userId));
+    if (!storedRefreshToken) return null;
+    if (!(storedRefreshToken === refreshToken)) return null;
+
+    const user = await User.findOne({ id: tokenData.userId });
+    if (!user) return null;
+
+    const newAccessToken = createAccessToken(user); // 액세스토큰생성
+    const newRefreshToken = createRefreshToken(user); // 리프레시토큰생성
+    // 리프레시토큰 redis저장
+    await redis.set(String(user.id), newRefreshToken);
+
+    // 쿠키로 리프레시 토큰 전송
+    setRefreshTokenHeader(res, newRefreshToken);
+
+    return { accessToken: newAccessToken };
   }
 }

@@ -2,6 +2,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { Request, Response } from 'express';
 import { buildSchema } from 'type-graphql';
+import redis from '../redis/redis-client';
 import { CutResolver } from '../resolvers/Cut';
 import { FilmResolver } from '../resolvers/Film';
 import { UserResolver } from '../resolvers/User';
@@ -14,6 +15,7 @@ export interface MyContext {
   req: Request;
   res: Response;
   verifiedUser: JwtVerifiedUser;
+  redis: typeof redis;
 }
 
 const createApolloServer = async (): Promise<ApolloServer> => {
@@ -25,7 +27,7 @@ const createApolloServer = async (): Promise<ApolloServer> => {
     context: ({ req, res }) => {
       // 액세스 토큰 검증
       const verifed = verifyAccessTokenFromReqHeaders(req.headers);
-      return { req, res, verifiedUser: verifed };
+      return { req, res, verifiedUser: verifed, redis };
     },
   });
 };

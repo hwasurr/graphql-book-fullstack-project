@@ -1,4 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
+import { Response } from 'express';
 import { IncomingHttpHeaders } from 'http';
 import jwt from 'jsonwebtoken';
 import User from '../entities/User';
@@ -15,7 +16,7 @@ export const createAccessToken = (user: User): string => {
   const accessToken = jwt.sign(
     userData,
     process.env.JWT_SECRET_KEY || DEFAULT_JWT_SECRET_KEY,
-    { expiresIn: '30m' },
+    { expiresIn: '10m' },
   );
   return accessToken;
 };
@@ -60,4 +61,17 @@ export const verifyAccessTokenFromReqHeaders = (
   } catch {
     return null;
   }
+};
+
+export const setRefreshTokenHeader = (
+  res: Response,
+  refreshToken: string,
+): void => {
+  res.cookie('refreshtoken', refreshToken, {
+    // 자바스크립트 코드로 접근 불가능하도록
+    httpOnly: true,
+    // 프로덕션 환경의 경우, https 프로토콜에서만 동작하도록
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'none',
+  });
 };
