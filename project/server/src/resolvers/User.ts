@@ -14,7 +14,7 @@ import {
 import { MyContext } from '../apollo/createApolloServer';
 import User from '../entities/User';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
-import { createAccessToken } from '../utils/jwt-auth';
+import { createAccessToken, createRefreshToken } from '../utils/jwt-auth';
 
 @InputType()
 export class SignUpInput {
@@ -79,6 +79,7 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   public async login(
     @Arg('loginInput') loginInput: LoginInput,
+    @Ctx() { res }: MyContext,
   ): Promise<LoginResponse> {
     const { emailOrUsername, password } = loginInput;
 
@@ -102,6 +103,15 @@ export class UserResolver {
 
     // 액세스 토큰 발급
     const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
+
+    res.cookie('refreshtoken', refreshToken, {
+      // 자바스크립트 코드로 접근 불가능하도록
+      httpOnly: true,
+      // 프로덕션 환경의 경우, https 프로토콜에서만 동작하도록
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
     return { user, accessToken };
   }

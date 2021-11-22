@@ -10,7 +10,13 @@ async function main() {
 
   const apolloServer = await createApolloServer();
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: {
+      origin: ['http://localhost:3000'],
+      credentials: true,
+    },
+  });
 
   const httpServer = http.createServer(app);
 
