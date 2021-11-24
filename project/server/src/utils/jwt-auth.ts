@@ -71,7 +71,7 @@ export const setRefreshTokenHeader = (
     // 자바스크립트 코드로 접근 불가능하도록
     httpOnly: true,
     // 프로덕션 환경의 경우, https 프로토콜에서만 동작하도록
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'none',
   });
 };
