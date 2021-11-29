@@ -2,6 +2,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { Request, Response } from 'express';
 import { buildSchema } from 'type-graphql';
+import { createCutVoteLoader } from '../dataloaders/cutVoteLoader';
 import redis from '../redis/redis-client';
 import { CutResolver } from '../resolvers/Cut';
 import { FilmResolver } from '../resolvers/Film';
@@ -16,6 +17,7 @@ export interface MyContext {
   res: Response;
   verifiedUser: JwtVerifiedUser;
   redis: typeof redis;
+  cutVoteLoader: ReturnType<typeof createCutVoteLoader>;
 }
 
 const createApolloServer = async (): Promise<ApolloServer> => {
@@ -27,33 +29,15 @@ const createApolloServer = async (): Promise<ApolloServer> => {
     context: ({ req, res }) => {
       // 액세스 토큰 검증
       const verifed = verifyAccessTokenFromReqHeaders(req.headers);
-      return { req, res, verifiedUser: verifed, redis };
+      return {
+        req,
+        res,
+        verifiedUser: verifed,
+        redis,
+        cutVoteLoader: createCutVoteLoader(),
+      };
     },
   });
 };
 
 export default createApolloServer;
-
-// context: ({ req, res }) => {
-//   let user: User | null = null;
-//   const { authorization } = req.headers;
-//   if (!authorization) user = null;
-//   const accessToken = authorization?.split(' ')[1];
-//   if (!accessToken) user = null;
-//   if (accessToken) {
-//     try {
-//       user = jwt.verify(
-//         accessToken,
-//         process.env.JWT_SECRET_KEY || 'secret-key',
-//       ) as User;
-//     } catch (err) {
-//       console.error('access_token expired: ', err.expiredAt);
-//       user = null;
-//     }
-//   }
-//   return {
-//     req,
-//     res,
-//     user,
-//   };
-// },
