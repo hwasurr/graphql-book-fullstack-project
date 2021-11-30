@@ -67,14 +67,6 @@ export class CutResolver {
     return cutVotes.length;
   }
 
-  @FieldResolver(() => [CutVote])
-  async votes(
-    @Root() cut: Cut,
-    @Ctx() { cutVoteLoader }: MyContext,
-  ): Promise<CutVote[]> {
-    return cutVoteLoader.load({ cutId: cut.id });
-  }
-
   @FieldResolver(() => Boolean)
   async isVoted(
     @Root() cut: Cut,
