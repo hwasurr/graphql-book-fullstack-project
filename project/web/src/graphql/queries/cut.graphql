@@ -6,14 +6,7 @@ query cut($cutId: Int!) {
             id
             title
         }
+        votesCount
+        isVoted
     }
-#   cutReviews(cutId:$cutId) {
-#     id
-#     contents
-#     isMine
-#     user {
-#       username
-#       email
-#     }
-#   }
 }
