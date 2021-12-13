@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CutReview } from './CutReview';
 import { CutVote } from './CutVote';
 
 @ObjectType()
@@ -39,4 +40,7 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => CutVote, (cutVote) => cutVote.user)
   cutVotes: CutVote[];
+
+  @OneToMany(() => CutReview, (cutReview) => cutReview.user)
+  cutReviews: CutReview[];
 }
