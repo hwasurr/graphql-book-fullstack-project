@@ -4,12 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { Cut } from './Cut';
 import User from './User';
 
 @ObjectType()
@@ -30,6 +29,9 @@ export class CutReview extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.cutReviews)
   user: User;
+
+  @RelationId((cutReview: CutReview) => cutReview.user)
+  userId: number;
 
   @Field(() => String, { description: '생성 일자' })
   @CreateDateColumn({ comment: '생성 일자' })
