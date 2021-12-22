@@ -23,7 +23,9 @@ import { isAuthenticated } from '../middlewares/isAuthenticated';
 
 @InputType()
 class CreateOrUpdateCutReviewInput {
-  @Field({ description: '명장면 번호' }) @IsInt() cutId: number;
+  @Field(() => Int, { description: '명장면 번호' })
+  @IsInt()
+  cutId: number;
 
   @Field({ description: '감상평 내용' })
   @IsString()

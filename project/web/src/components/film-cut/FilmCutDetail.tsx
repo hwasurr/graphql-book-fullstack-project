@@ -8,6 +8,7 @@ import {
   Image,
   Text,
   useColorModeValue,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { useMemo } from 'react';
@@ -19,6 +20,7 @@ import {
   useMeQuery,
   useVoteMutation,
 } from '../../generated/graphql';
+import { FilmCutReviewRegiModal } from './FilmCutReviewRegiModal';
 
 interface MovieCutDetailProps {
   cutImg: string;
@@ -72,6 +74,7 @@ export function FilmCutDetail({
     return false;
   }, [accessToken, userData?.me?.id]);
 
+  const reviewRegiDialog = useDisclosure();
   return (
     <Box>
       <AspectRatio ratio={16 / 9}>
@@ -99,10 +102,18 @@ export function FilmCutDetail({
             >
               <Text>{votesCount}</Text>
             </Button>
-            <Button colorScheme="teal">감상남기기</Button>
+            <Button colorScheme="teal" onClick={reviewRegiDialog.onOpen}>
+              감상남기기
+            </Button>
           </HStack>
         </Flex>
       </Box>
+
+      <FilmCutReviewRegiModal
+        cutId={cutId}
+        isOpen={reviewRegiDialog.isOpen}
+        onClose={reviewRegiDialog.onClose}
+      />
     </Box>
   );
 }

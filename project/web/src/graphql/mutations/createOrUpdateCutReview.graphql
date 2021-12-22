@@ -1,0 +1,13 @@
+mutation createOrUpdateCutReview($cutReviewInput: CreateOrUpdateCutReviewInput!) {
+  createOrUpdateCutReview(cutReviewInput: $cutReviewInput) {
+    contents
+    cutId
+    id
+    user {
+      username
+      email
+    }
+    createdAt
+    isMine
+  }
+}
