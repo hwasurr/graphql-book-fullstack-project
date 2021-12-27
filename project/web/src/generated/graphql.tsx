@@ -222,6 +222,16 @@ export type CreateOrUpdateCutReviewMutation = (
   )> }
 );
 
+export type DeleteCutReviewMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteCutReviewMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteReview'>
+);
+
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
 }>;
@@ -298,6 +308,13 @@ export type CutQuery = (
       { __typename?: 'Film' }
       & Pick<Film, 'id' | 'title'>
     )> }
+  )>, cutReviews: Array<(
+    { __typename?: 'CutReview' }
+    & Pick<CutReview, 'id' | 'contents' | 'isMine'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'email'>
+    ) }
   )> }
 );
 
@@ -406,6 +423,37 @@ export function useCreateOrUpdateCutReviewMutation(baseOptions?: Apollo.Mutation
 export type CreateOrUpdateCutReviewMutationHookResult = ReturnType<typeof useCreateOrUpdateCutReviewMutation>;
 export type CreateOrUpdateCutReviewMutationResult = Apollo.MutationResult<CreateOrUpdateCutReviewMutation>;
 export type CreateOrUpdateCutReviewMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateCutReviewMutation, CreateOrUpdateCutReviewMutationVariables>;
+export const DeleteCutReviewDocument = gql`
+    mutation deleteCutReview($id: Int!) {
+  deleteReview(id: $id)
+}
+    `;
+export type DeleteCutReviewMutationFn = Apollo.MutationFunction<DeleteCutReviewMutation, DeleteCutReviewMutationVariables>;
+
+/**
+ * __useDeleteCutReviewMutation__
+ *
+ * To run a mutation, you first call `useDeleteCutReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCutReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCutReviewMutation, { data, loading, error }] = useDeleteCutReviewMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCutReviewMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCutReviewMutation, DeleteCutReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCutReviewMutation, DeleteCutReviewMutationVariables>(DeleteCutReviewDocument, options);
+      }
+export type DeleteCutReviewMutationHookResult = ReturnType<typeof useDeleteCutReviewMutation>;
+export type DeleteCutReviewMutationResult = Apollo.MutationResult<DeleteCutReviewMutation>;
+export type DeleteCutReviewMutationOptions = Apollo.BaseMutationOptions<DeleteCutReviewMutation, DeleteCutReviewMutationVariables>;
 export const LoginDocument = gql`
     mutation login($loginInput: LoginInput!) {
   login(loginInput: $loginInput) {
@@ -589,6 +637,15 @@ export const CutDocument = gql`
     }
     votesCount
     isVoted
+  }
+  cutReviews(cutId: $cutId) {
+    id
+    contents
+    isMine
+    user {
+      username
+      email
+    }
   }
 }
     `;

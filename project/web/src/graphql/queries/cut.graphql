@@ -1,12 +1,22 @@
 query cut($cutId: Int!) {
-    cut(cutId: $cutId) {
-        id
-        src
-        film {
-            id
-            title
-        }
-        votesCount
-        isVoted
+  cut(cutId: $cutId) {
+    id
+    src
+    film {
+      id
+      title
     }
+    votesCount
+    isVoted
+  }
+  # cutReviews 필드 추가
+  cutReviews(cutId: $cutId) {
+    id
+    contents
+    isMine
+    user {
+      username
+      email
+    }
+  }
 }
