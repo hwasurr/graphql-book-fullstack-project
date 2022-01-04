@@ -2,6 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import {
   Avatar,
   Box,
+  Text,
   Button,
   Flex,
   Link,
@@ -14,7 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useLogoutMutation, useMeQuery } from '../../generated/graphql';
+import {
+  useLogoutMutation,
+  useMeQuery,
+  useUploadProfileImageMutation,
+} from '../../generated/graphql';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 
 const LoggedInNavbarItem = (): JSX.Element => {
@@ -30,15 +35,52 @@ const LoggedInNavbarItem = (): JSX.Element => {
       console.log(e);
     }
   }
+  const [upload] = useUploadProfileImageMutation();
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      await upload({
+        variables: { file },
+        update: (cache) => {
+          cache.evict({ fieldName: 'me' });
+        },
+      });
+    }
+  }
+
+  const accessToken = localStorage.getItem('access_token');
+  const { data } = useMeQuery({ skip: !accessToken });
+  const profileImage = useMemo(() => {
+    if (data?.me?.profileImage) {
+      return `http://localhost:4000/${data?.me?.profileImage}`;
+    }
+    return '';
+  }, [data]);
   return (
     <Stack justify="flex-end" alignItems="center" direction="row" spacing={3}>
       <ColorModeSwitcher />
 
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
-          <Avatar size="sm" />
+          <Avatar size="sm" src={profileImage} />
         </MenuButton>
-        <MenuList>
+        <MenuList minW={300}>
+          <Flex px={4} pt={2} pb={4}>
+            <label htmlFor="upload-profile-image">
+              <input
+                id="upload-profile-image"
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleImageUpload}
+              />
+              <Avatar size="md" src={profileImage} mr={4} cursor="pointer" />
+            </label>
+            <Box>
+              <Text fontWeight="bold">{data?.me?.username}</Text>
+              <Text>{data?.me?.email}</Text>
+            </Box>
+          </Flex>
           <MenuItem isDisabled={logoutLoading} onClick={onLogoutClick}>
             로그아웃
           </MenuItem>

@@ -2,11 +2,11 @@ import {
   ApolloClient,
   from,
   fromPromise,
-  HttpLink,
   NormalizedCacheObject,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import { createUploadLink } from 'apollo-upload-client';
 import { refreshAccessToken } from './auth';
 import { createApolloCache } from './createApolloCache';
 
@@ -41,11 +41,6 @@ const errorLink = onError(
   },
 );
 
-const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
-  credentials: 'include',
-});
-
 const authLink = setContext((request, prevContext) => {
   const accessToken = localStorage.getItem('access_token');
   return {
@@ -56,11 +51,18 @@ const authLink = setContext((request, prevContext) => {
   };
 });
 
+const httpUploadLink = createUploadLink({
+  uri: 'http://localhost:4000/graphql',
+  fetchOptions: {
+    credentials: 'include',
+  },
+});
+
 export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   apolloClient = new ApolloClient({
     cache: createApolloCache(),
     uri: 'http://localhost:4000/graphql',
-    link: from([authLink, errorLink, httpLink]),
+    link: from([authLink, errorLink, httpUploadLink as any]),
   });
   return apolloClient;
 };

@@ -1,6 +1,8 @@
 import argon2 from 'argon2';
-import jwt from 'jsonwebtoken';
 import { IsEmail, IsString } from 'class-validator';
+import { createWriteStream } from 'fs';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import jwt from 'jsonwebtoken';
 import {
   Arg,
   Ctx,
@@ -168,5 +170,29 @@ export class UserResolver {
     setRefreshTokenHeader(res, newRefreshToken);
 
     return { accessToken: newAccessToken };
+  }
+
+  @UseMiddleware(isAuthenticated)
+  @Mutation(() => Boolean)
+  async uploadProfileImage(
+    @Ctx() { verifiedUser }: MyContext,
+    @Arg('file', () => GraphQLUpload)
+    { createReadStream, filename }: FileUpload,
+  ): Promise<boolean> {
+    const realFileName = verifiedUser.userId + filename;
+    const filePath = `public/${realFileName}`;
+
+    return new Promise((resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(filePath))
+        .on('finish', async () => {
+          await User.update(
+            { id: verifiedUser.userId },
+            { profileImage: realFileName },
+          );
+          return resolve(true);
+        })
+        .on('error', () => reject(Error('file upload failed'))),
+    );
   }
 }

@@ -1,9 +1,10 @@
 query me {
-    me {
-        id
-        username
-        email
-        updatedAt
-        createdAt
-    }
+  me {
+    id
+    username
+    email
+    profileImage
+    updatedAt
+    createdAt
+  }
 }
