@@ -13,6 +13,7 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { MyContext } from '../apollo/createApolloServer';
+import { MySubscriptionContext } from '../apollo/createSubscriptionServer';
 import Notification from '../entities/Notification';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
 
@@ -53,15 +54,15 @@ export class NotificationResolver {
     filter: ({
       payload,
       context,
-    }: ResolverFilterData<Notification, null, MyContext>) => {
-      console.log('newNotification context: ', context);
-      return true;
-      // if (payload && payload.userId === auth.userId) return true;
-      // return false;
+    }: ResolverFilterData<Notification, null, MySubscriptionContext>) => {
+      const { verifiedUser } = context;
+      if (verifiedUser && payload && payload.userId === verifiedUser.userId) {
+        return true;
+      }
+      return false;
     },
   })
   newNotification(@Root() notificationPayload: Notification): Notification {
-    // console.log('newNotification - ctx: ', ctx);
     return notificationPayload;
   }
 }

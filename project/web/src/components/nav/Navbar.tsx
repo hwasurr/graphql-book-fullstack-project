@@ -2,7 +2,6 @@ import { useApolloClient } from '@apollo/client';
 import {
   Avatar,
   Box,
-  Text,
   Button,
   Flex,
   Link,
@@ -11,6 +10,7 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useMemo } from 'react';
@@ -21,6 +21,7 @@ import {
   useUploadProfileImageMutation,
 } from '../../generated/graphql';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
+import Notification from '../notification/Notification';
 
 const LoggedInNavbarItem = (): JSX.Element => {
   const client = useApolloClient();
@@ -59,7 +60,7 @@ const LoggedInNavbarItem = (): JSX.Element => {
   return (
     <Stack justify="flex-end" alignItems="center" direction="row" spacing={3}>
       <ColorModeSwitcher />
-
+      <Notification />
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
           <Avatar size="sm" src={profileImage} />

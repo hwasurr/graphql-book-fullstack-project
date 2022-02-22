@@ -1,0 +1,9 @@
+subscription newNotification {
+  newNotification {
+    id
+    userId
+    text
+    createdAt
+    updatedAt
+  }
+}
