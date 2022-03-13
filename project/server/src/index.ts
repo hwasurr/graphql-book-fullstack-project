@@ -1,4 +1,5 @@
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import express from 'express';
 import { graphqlUploadExpress } from 'graphql-upload';
 import http from 'http';
@@ -8,12 +9,17 @@ import { createSchema } from './apollo/createSchema';
 import { createSubscriptionServer } from './apollo/createSubscriptionServer';
 import { createDB } from './db/db-client';
 
+dotenv.config();
+
 async function main() {
   await createDB();
   const app = express();
   app.use(express.static('public'));
   app.use(cookieParser());
   app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1000 * 5, maxFiles: 1 }));
+  app.get('/', (req, res) => {
+    res.status(200).send(); // for healthcheck
+  });
   const httpServer = http.createServer(app);
 
   const schema = await createSchema();
