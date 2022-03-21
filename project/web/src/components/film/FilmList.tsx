@@ -17,12 +17,12 @@ export default function FilmList(): JSX.Element {
   return (
     <SimpleGrid columns={[2, null, 3]} spacing={[2, null, 10]}>
       {loading &&
-        new Array(6).fill(0).map((x) => <Skeleton key={x} height="400px" />)}
+        // eslint-disable-next-line react/no-array-index-key
+        new Array(6).map((x, i) => <Skeleton key={i} height="400px" />)}
       {!loading &&
         data &&
         data.films.films.map((film, i) => (
-          <Box key={film.id}>
-            <FilmCard film={film} />
+          <Box key={film.id + film.release}>
             {data.films.cursor && i === data.films.films.length - LIMIT / 2 && (
               <Waypoint
                 onEnter={() => {
@@ -35,6 +35,7 @@ export default function FilmList(): JSX.Element {
                 }}
               />
             )}
+            <FilmCard film={film} />
           </Box>
         ))}
     </SimpleGrid>
