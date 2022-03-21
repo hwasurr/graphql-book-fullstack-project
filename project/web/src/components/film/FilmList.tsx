@@ -23,7 +23,6 @@ export default function FilmList(): JSX.Element {
         data &&
         data.films.films.map((film, i) => (
           <Box key={film.id + film.release}>
-            <FilmCard film={film} />
             {data.films.cursor && i === data.films.films.length - LIMIT / 2 && (
               <Waypoint
                 onEnter={() => {
@@ -36,6 +35,7 @@ export default function FilmList(): JSX.Element {
                 }}
               />
             )}
+            <FilmCard film={film} />
           </Box>
         ))}
     </SimpleGrid>
