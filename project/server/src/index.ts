@@ -18,7 +18,7 @@ async function main() {
         hello: () => `Hello world`,
       },
     },
-    plugins: [ApolloServerPluginLandingPageLocalDefault],
+    plugins: [ApolloServerPluginLandingPageLocalDefault()],
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
