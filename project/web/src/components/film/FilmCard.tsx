@@ -27,7 +27,7 @@ export default function FilmCard({ film }: FilmCardProps): React.ReactElement {
       >
         <Box bg="gray.100" mt={-3} mx={-3} mb={2} pos="relative">
           <AspectRatio ratio={2 / 3}>
-            <Image src={film.posterImg} layout="fill" />
+            <Image src={film.posterImg} />
           </AspectRatio>
         </Box>
         <Stack>
