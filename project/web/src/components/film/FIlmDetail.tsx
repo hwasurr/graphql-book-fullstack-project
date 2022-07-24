@@ -15,7 +15,7 @@ export default function FilmDetail({
       alignItems="center"
     >
       <Box maxW={250} flex={1}>
-        <Image src={film?.posterImg} layout="fill" borderRadius={20} />
+        <Image src={film?.posterImg} borderRadius={20} />
       </Box>
 
       <Flex

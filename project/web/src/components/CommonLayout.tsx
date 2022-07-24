@@ -6,7 +6,6 @@ interface CommonLayoutProps {
   bg?: BackgroundProps['bg'];
   children: React.ReactNode;
 }
-
 export default function CommonLayout({
   children,
   bg,
