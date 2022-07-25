@@ -1,7 +1,6 @@
 {
     "recommendations": [
         "graphql.vscode-graphql",
-        "coenraads.bracket-pair-colorizer-2",
         "formulahendry.auto-rename-tag",
         "oderwat.indent-rainbow",
         "dbaeumer.vscode-eslint"
