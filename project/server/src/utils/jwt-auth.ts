@@ -70,7 +70,7 @@ export const setRefreshTokenHeader = (
   res.cookie('refreshtoken', refreshToken, {
     // 자바스크립트 코드로 접근 불가능하도록
     httpOnly: true,
-    secure: !!(process.env.NODE_ENV === 'production'),
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'none',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
   });
 };
