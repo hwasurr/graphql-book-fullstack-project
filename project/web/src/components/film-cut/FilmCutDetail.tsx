@@ -26,7 +26,7 @@ import { FilmCutReview } from './FilmCutReview';
 import FilmCutReviewDeleteAlert from './FilmCutReviewDelete';
 import { FilmCutReviewRegiModal } from './FilmCutReviewRegiModal';
 
-interface MovieCutDetailProps {
+interface FilmCutDetailProps {
   cutImg: string;
   cutId: number;
   isVoted?: boolean;
@@ -39,7 +39,7 @@ export function FilmCutDetail({
   isVoted = false,
   votesCount = 0,
   reviews,
-}: MovieCutDetailProps): JSX.Element {
+}: FilmCutDetailProps): JSX.Element {
   const toast = useToast();
   const voteButtonColor = useColorModeValue('gray.500', 'gray.400');
   const [vote, { loading: voteLoading }] = useVoteMutation({
