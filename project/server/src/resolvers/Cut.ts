@@ -42,8 +42,10 @@ export class CutResolver {
     if (verifiedUser) {
       const { userId } = verifiedUser;
       const alreadyVoted = await CutVote.findOne({
-        cutId,
-        userId,
+        where: {
+          cutId,
+          userId,
+        },
       });
       if (alreadyVoted) {
         await alreadyVoted.remove();
