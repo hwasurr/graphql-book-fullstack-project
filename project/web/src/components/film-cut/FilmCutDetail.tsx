@@ -20,7 +20,7 @@ import {
   useVoteMutation,
 } from '../../generated/graphql';
 
-interface MovieCutDetailProps {
+interface FilmCutDetailProps {
   cutImg: string;
   cutId: number;
   isVoted?: boolean;
@@ -31,7 +31,7 @@ export function FilmCutDetail({
   cutId,
   isVoted = false,
   votesCount = 0,
-}: MovieCutDetailProps): JSX.Element {
+}: FilmCutDetailProps): JSX.Element {
   const toast = useToast();
   const voteButtonColor = useColorModeValue('gray.500', 'gray.400');
   const [vote, { loading: voteLoading }] = useVoteMutation({
