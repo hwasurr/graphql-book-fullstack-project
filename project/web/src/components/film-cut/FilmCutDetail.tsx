@@ -9,14 +9,14 @@ import {
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 
-interface MovieCutDetailProps {
+interface FilmCutDetailProps {
   cutImg: string;
   cutId: number;
 }
 export function FilmCutDetail({
   cutImg,
   cutId,
-}: MovieCutDetailProps): JSX.Element {
+}: FilmCutDetailProps): JSX.Element {
   return (
     <Box>
       <AspectRatio ratio={16 / 9}>
