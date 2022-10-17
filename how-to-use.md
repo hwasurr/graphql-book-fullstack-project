@@ -23,7 +23,7 @@ Docker, MySQL, Redis, VSCode 와 같은 경우에는 책의 내용에 따라 설
 
    ```bash
    # 프로젝트를 진행할 디렉토리에서
-   git clone https://github/<자신의Github아이디>/graphql-book-fullstack-project
+   git clone https://github.com/<자신의Github아이디>/graphql-book-fullstack-project
    ```
 
 3. 원격에 존재하는 `chapter-3` 브랜치로 현재 브랜치를 변경합니다. `chapter-3` 브랜치는 3챕터까지의 내용만 반영되어 있어, 프로젝트가 구성된 상태까지만 가져와 작업을 시작할 수 있습니다.
@@ -31,6 +31,24 @@ Docker, MySQL, Redis, VSCode 와 같은 경우에는 책의 내용에 따라 설
    ```bash
    git checkout chapter-3
    ```
+
+   미리 구성된 접근 가능한 브랜치는 다음과 같습니다.
+
+   - 완성된 프로젝트: [master](https://github.com/hwasurr/graphql-book-fullstack-project/tree/master)
+   - 챕터별 구성된 브랜치
+     - [chapter-3](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-3)
+     - [chapter-4](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-4)
+     - [chapter-4.1](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-4.1)
+     - [chapter-4.2](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-4.2)
+     - [chapter-4.3](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-4.3)
+     - [chapter-5](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-5)
+     - [chapter-5.2](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-5.2)
+     - [chapter-5.3](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-5.3)
+     - [chapter-5.4](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-5.4)
+     - [chapter-6](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-6)
+     - [chapter-6.1](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-6.1)
+     - [chapter-6.2](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-6.2)
+     - [chapter-7](https://github.com/hwasurr/graphql-book-fullstack-project/tree/chapter-7)
 
 4. 이제 구성된 프로젝트에서 작업을 시작할 수 있습니다. 본인만의 브랜치를 따로 만들고 싶은 경우 `git checkout -b <브랜치명>`명령 을 통해 새로운 브랜치를 만들어 진행할 수 있습니다.
 
