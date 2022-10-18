@@ -1,0 +1,27 @@
+name: 🍤 오타 및 문장오류 제보
+description: 도서에서 발견된 오타 및 문장오류를 제보합니다.
+title: '[오타/문장오류] '
+labels: ['wontfix']
+assignees:
+  - hwasurr
+body:
+  - type: markdown
+    attributes:
+      value: 먼저, 제보에 감사합니다!🥰
+
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: '🐛 오타 또는 문장 오류가 발견된 페이지'
+      description: '오타 또는 문장 오류가 발견된 내용이 포함된 쪽수를 알려주세요.'
+      placeholder: 예) 97p ~ 102p
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: '🍔 오타 또는 문장 오류 내용'
+      description: '발견한 오타나 어색한 문장을 자세히 알려주세요.'
+      placeholder: |
+        예) 리액트 컴노펀트를 -> 리액트 컴포넌트를
