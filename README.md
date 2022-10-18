@@ -6,9 +6,7 @@
 
 ## 책 소개
 
-<p align="center">
-<img width="280px" height="100%" src="./assets/graphql_book_signage_xl.jpg" alt="GraphQL과 타입스크립트로 개발하는 웹 서비스 표지">
-</p>
+<img width="280px" src="./assets/graphql_book_signage.jpg" alt="GraphQL과 타입스크립트로 개발하는 웹 서비스 표지">
 
 - 제목: GraphQL과 타입스크립트로 개발하는 웹 서비스
 - 부제: 설계부터 개발·배포까지 따라 하며 완성하는 웹 풀스택 개발
