@@ -1,0 +1,19 @@
+name: 💬 질문 및 기타
+description: 질문사항이나 도움요청 등 기타 다른 문의사항
+title: '[질문/기타] '
+labels: ['question']
+assignees:
+  - hwasurr
+body:
+  - type: markdown
+    attributes:
+      value: 먼저, 책을 읽어주셔서 감사합니다!🥰
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: '🍥 질문사항 또는 도움요청 사항'
+      description: '질문 또는 도움 요청 등 문의 사항을 입력해주세요.'
+      placeholder: |
+        아무 내용이나 괜찮습니다. 저자의 개인정보같은 시덥잖은 내용도 좋습니다.^^
