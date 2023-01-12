@@ -4,6 +4,8 @@
 
 [프로젝트 저장소 사용 방법](./how-to-use.md)에서 이 저장소를 어떻게 사용할 지에 대한 내용을 간략히 담았습니다. 질문 또는 오류 및 오타 제보등은 [이슈 게시판](https://github.com/hwasurr/graphql-book-fullstack-project/issues)을 활용해주세요.
 
+독자분들의 소중한 제보를 통해 알려진 버그와 그 해결에 대한 내용은 [버그 목록 문서](bug-list.md)에서 확인할 수 있으며, 알려진 오타 목록은 [오타 목록 문서](typo-list.md)에서 확인할 수 있습니다.
+
 ## 책 소개
 
 <img width="450" src="./assets/graphql_book_signage.jpg" alt="GraphQL과 타입스크립트로 개발하는 웹 서비스 표지">
