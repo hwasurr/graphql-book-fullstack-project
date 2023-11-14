@@ -81,3 +81,40 @@ new Array(6).fill(0).map((x) => <Skeleton key={x} height="400px" />
 // eslint-disable-next-line react/no-array-index-key
 new Array(6).fill(0).map((_, index) => <Skeleton key={index} height="400px" />
 ```
+
+### (p.293) 토큰 리프레시 링크 지정 관련 ApolloClient 전역변수 지정 누락
+
+제보 이슈: [#5](https://github.com/hwasurr/graphql-book-fullstack-project/issues/5)
+이슈 답변: https://github.com/hwasurr/graphql-book-fullstack-project/issues/5#issuecomment-1810211241
+
+- 기존
+
+```typescript
+let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+... 링크들
+
+export const createApolloClient = (): ApolloClient<NormalizedCacheObject> =>
+  new ApolloClient({
+    cache: createApolloCache(),
+    uri: `${process.env.REACT_APP_API_HOST}/graphql`,
+    link: splitLink,
+  });
+```
+
+- 올바른 코드블럭
+
+```ts
+let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+... 링크들
+
+export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
+  apolloClient = new ApolloClient({
+    cache: createApolloCache(),
+    uri: `${process.env.REACT_APP_API_HOST}/graphql`,
+    link: splitLink,
+  });
+  return apolloClient;
+};
+```
