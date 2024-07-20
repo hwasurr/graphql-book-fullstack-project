@@ -94,7 +94,7 @@ function SignUpRealForm() {
           placeholder="8자 이상의 영문,숫자,특문"
           {...register('signUpInput.password', {
             required: '암호를 입력해주세요.',
-            min: { value: 8, message: '비밀번호는 8자 이상이어야 합니다.' },
+            minLength: { value: 8, message: '비밀번호는 8자 이상이어야 합니다.' },
             pattern: {
               value:
                 // eslint-disable-next-line max-len
