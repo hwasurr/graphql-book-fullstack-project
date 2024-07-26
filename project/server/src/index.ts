@@ -1,27 +1,24 @@
 import 'reflect-metadata';
-import express from 'express';
-import { ApolloServer, gql } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import http from 'http';
+import express from 'express'; 
+import http from 'http'; 
+import { createDB } from './db/db-client'; 
+import createApolloServer from './apollo/createApolloServer';
+import cookieParser from 'cookie-parser';
 
 async function main() {
+  await createDB();
   const app = express();
+  app.use(cookieParser());
 
-  const apolloServer = new ApolloServer({
-    typeDefs: gql`
-      type Query {
-        hello: String
-      }
-    `,
-    resolvers: {
-      Query: {
-        hello: () => `Hello world`,
-      },
-    },
-    plugins: [ApolloServerPluginLandingPageLocalDefault()],
-  });
+  const apolloServer = await createApolloServer();
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ 
+    app,
+    cors: {
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
+      credentials: true,
+    },    
+  });
 
   const httpServer = http.createServer(app);
 
